@@ -36,3 +36,9 @@ type DropSubStr<Str extends string, SubStr extends string> = Str extends `${infe
   ? DropSubStr<`${Prefix}${Suffix}`, SubStr>
   : Str
 type testDropSubStr = DropSubStr<strs2, '_'>
+
+// 函数类型
+type AppendArgument<Func extends Function, Arg> = Func extends (...args: infer Args) => infer ReturnType
+  ? (...args: [...Args, Arg]) => ReturnType
+  : never
+type testAppendArgument = AppendArgument<(name: string) => void, number>
