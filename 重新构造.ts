@@ -1,3 +1,4 @@
+// 数组类型
 type tuple = [1, true, 'a']
 type Push<Arr extends unknown[], Ele> = [...Arr, Ele]
 type testPush = Push<tuple, [4]>
@@ -21,3 +22,17 @@ type ZipLoop<One extends unknown[], Other extends unknown[]> = One extends [infe
     : []
   : []
 type testZipLoop = ZipLoop<[1, 2, 3], [4, 5, 6]>
+
+// 字符串类型
+type strs = 'gray'
+type CapitalizeStr<Str extends string> = Str extends `${infer First}${infer Rest}` ? `${Uppercase<First>}${Rest}` : Str
+type testCapitalizeStr = CapitalizeStr<strs>
+type strs2 = 'gray_gray_gray'
+type CamelCase<Str extends string> = Str extends `${infer Left}_${infer Right}${infer Rest}`
+  ? `${Left}${Uppercase<Right>}${CamelCase<Rest>}`
+  : Str
+type testCamelCase = CamelCase<strs2>
+type DropSubStr<Str extends string, SubStr extends string> = Str extends `${infer Prefix}${SubStr}${infer Suffix}`
+  ? DropSubStr<`${Prefix}${Suffix}`, SubStr>
+  : Str
+type testDropSubStr = DropSubStr<strs2, '_'>
