@@ -42,3 +42,45 @@ type AppendArgument<Func extends Function, Arg> = Func extends (...args: infer A
   ? (...args: [...Args, Arg]) => ReturnType
   : never
 type testAppendArgument = AppendArgument<(name: string) => void, number>
+
+// 索引类型
+type obj = {
+  name: string
+  age: number
+  gender: boolean
+}
+
+type Mapping<Obj extends Record<string, any>> = {
+  [Key in keyof Obj]: [Obj[Key], Obj[Key]]
+}
+
+type testMapping = Mapping<{ a: 1; b: 2 }>
+
+type UppercaseKey<Obj extends Record<string, any>> = {
+  [Key in keyof Obj as Uppercase<Key & string>]: Obj[Key]
+}
+type testUppercaseKey = UppercaseKey<{ a: 1; '3b2': 2 }>
+
+type ToReadonly<T extends Record<string, any>> = {
+  readonly [Key in keyof T]: T[Key]
+}
+
+type ToPartial<T extends Record<string, any>> = {
+  [Key in keyof T]?: T[Key]
+}
+type ToMutable<T extends Record<string, any>> = {
+  -readonly [Key in keyof T]: T[Key]
+}
+
+type ToRequired<T> = {
+  [Key in keyof T]-?: T[Key]
+}
+
+type FilterByValueType<Obj extends Record<string, any>, ValueType> = {
+  [Key in keyof Obj as Obj[Key] extends ValueType ? Key : never]: Obj[Key]
+}
+
+type testToReadonly = ToReadonly<{ a: 1; B: 2 }>
+type testToPartial = ToPartial<{ a: 1 }>
+type testToMutable = ToMutable<{ readonly a: 1 }>
+type testFilterByValueType = FilterByValueType<{ name: string; age: number }, string>
